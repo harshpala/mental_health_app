@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mental_health_app/res/colors.dart';
 import 'package:mental_health_app/screens/root/header.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../util/navigation/navigation_service.dart';
 import '../../util/navigation/routes.dart';
@@ -61,6 +67,35 @@ class _HomeScreenState extends State<HomeScreen> {
     "assets/png/home/home5.png",
     "assets/png/home/home6.png"
   ];
+
+  final url1 = [
+    'https://open.spotify.com/embed/playlist/6nxPNnmSE0d5WlplUsa5L3?utm_source=generator',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DX5Ejj0EkURtP?utm_source=generator&theme=1',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC?utm_source=generator',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC?utm_source=generator',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC?utm_source=generator'
+  ];
+  final url2 = [
+    "https://open.spotify.com/embed/playlist/37i9dQZF1DXbYM3nMM0oPk?utm_source=generator",
+    "https://open.spotify.com/embed/playlist/37i9dQZF1DXcRXFNfZr7Tp?utm_source=generator",
+    "https://open.spotify.com/embed/playlist/37i9dQZF1DX5IDTimEWoTd?utm_source=generator",
+    "https://open.spotify.com/embed/playlist/37i9dQZF1DWWa2DNhcausF?utm_source=generator",
+    "https://open.spotify.com/embed/playlist/37i9dQZF1DXbYM3nMM0oPk?utm_source=generator",
+  ];
+  final url3 = [
+  'https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThddIjWuGT?utm_source=generator',
+  'https://open.spotify.com/embed/playlist/37i9dQZF1DWU13kKnk03AP?utm_source=generator',
+  'https://open.spotify.com/embed/playlist/37i9dQZF1DX9qzRP3WOzKH?utm_source=generator',
+  'https://open.spotify.com/embed/playlist/37i9dQZF1DWVIzZt2GAU4X?utm_source=generator',
+  'https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThddIjWuGT?utm_source=generator',
+  ];
+
+  var repeatPosition = [0, 0, 0, 0, 0];
+
+  InAppWebViewController? webView;
+  InAppWebViewGroupOptions settings = InAppWebViewGroupOptions(
+      android: AndroidInAppWebViewOptions(
+          overScrollMode: AndroidOverScrollMode.OVER_SCROLL_ALWAYS));
 
   // List<String> trendingSongs = [
   //   "assets/png/home/home4.png",
@@ -221,6 +256,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     selectedCategoryIndex = value.round();
+                                    debugPrint(
+                                        "CATEGORY : $selectedCategoryIndex");
+                                    changeRepeatPosition();
+                                    webView?.loadUrl(
+                                        urlRequest:
+                                            URLRequest(url: setMusicUrl()));
                                   });
                                 },
                               ),
@@ -276,47 +317,82 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 127.r,
-                          width: double.infinity,
-                          child: ListView.separated(
-                            physics: const BouncingScrollPhysics(
-                                parent: AlwaysScrollableScrollPhysics()),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: trendingAlbums.length,
-                            padding: EdgeInsets.only(
-                              left: 20.w,
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxHeight: 500.0),
+                          child: Container(
+                            margin: const EdgeInsets.all(10.0),
+                            height: 500,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [AppColors.customblue, Colors.white],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
                             ),
-                            itemBuilder: (c, i) {
-                              return GestureDetector(
-                                onTap: () {
-                                  globals.i = i + 1;
-                                  globals.title = models[i];
-                                  GetIt.I
-                                      .get<NavigationService>()
-                                      .to(routeName: Routes.playlist);
-                                },
-                                child: Container(
-                                  width: 127.r,
-                                  height: 127.r,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.r),
-                                    image: DecorationImage(
-                                      image: AssetImage(trendingAlbums[i]),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                            child: InAppWebView(
+                              initialUrlRequest: URLRequest(url: setMusicUrl()),
+                              initialOptions: settings,
+                              gestureRecognizers: Set()
+                                ..add(
+                                  Factory<VerticalDragGestureRecognizer>(
+                                    () => VerticalDragGestureRecognizer(),
+                                  ), // or null
                                 ),
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return SizedBox(
-                                width: 17.w,
-                              );
-                            },
+                              onWebViewCreated:
+                                  (InAppWebViewController controller) {
+                                webView = controller;
+                              },
+                              onLoadStart: (InAppWebViewController controller,
+                                  Uri? url) {},
+                              onLoadStop: (InAppWebViewController controller,
+                                  Uri? url) async {},
+                              onProgressChanged:
+                                  (InAppWebViewController controller,
+                                      int progress) {},
+                            ),
                           ),
                         ),
+                        // SizedBox(
+                        //   height: 127.r,
+                        //   width: double.infinity,
+                        //   child: ListView.separated(
+                        //     physics: const BouncingScrollPhysics(
+                        //         parent: AlwaysScrollableScrollPhysics()),
+                        //     scrollDirection: Axis.horizontal,
+                        //     itemCount: trendingAlbums.length,
+                        //     padding: EdgeInsets.only(
+                        //       left: 20.w,
+                        //     ),
+                        //     itemBuilder: (c, i) {
+                        //       return GestureDetector(
+                        //         onTap: () {
+                        //           globals.i = i + 1;
+                        //           globals.title = models[i];
+                        //           GetIt.I
+                        //               .get<NavigationService>()
+                        //               .to(routeName: Routes.playlist);
+                        //         },
+                        //         child: Container(
+                        //           width: 127.r,
+                        //           height: 127.r,
+                        //           decoration: BoxDecoration(
+                        //             borderRadius: BorderRadius.circular(16.r),
+                        //             image: DecorationImage(
+                        //               image: AssetImage(trendingAlbums[i]),
+                        //               fit: BoxFit.cover,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       );
+                        //     },
+                        //     separatorBuilder:
+                        //         (BuildContext context, int index) {
+                        //       return SizedBox(
+                        //         width: 17.w,
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
                         selectedCategoryIndex != 2
                             ? message
                             : Padding(
@@ -371,6 +447,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 ]),
               ),
             )));
+  }
+
+  void changeRepeatPosition() {
+    if (repeatPosition[selectedCategoryIndex] != 2) {
+      repeatPosition[selectedCategoryIndex] += 1;
+    } else {
+      repeatPosition[selectedCategoryIndex] = 0;
+    }
+  }
+
+  Uri setMusicUrl() {
+    final music = [url1, url2, url3];
+    final url = music[repeatPosition[selectedCategoryIndex]];
+    return Uri.dataFromString(''' <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music app</title>
+</head>
+<body style="background:none #0000000;">
+    <iframe style="border-radius:12px" src=${url[selectedCategoryIndex]} width="100%" height="1000" frameBorder="0" allowfullscreen="" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</body>
+</html>''', mimeType: 'text/html', encoding: Encoding.getByName('utf-8'));
   }
 }
 
