@@ -9,7 +9,6 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mental_health_app/res/colors.dart';
 import 'package:mental_health_app/screens/root/header.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../util/navigation/navigation_service.dart';
 import '../../util/navigation/routes.dart';
@@ -83,11 +82,11 @@ class _HomeScreenState extends State<HomeScreen> {
     "https://open.spotify.com/embed/playlist/37i9dQZF1DXbYM3nMM0oPk?utm_source=generator",
   ];
   final url3 = [
-  'https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThddIjWuGT?utm_source=generator',
-  'https://open.spotify.com/embed/playlist/37i9dQZF1DWU13kKnk03AP?utm_source=generator',
-  'https://open.spotify.com/embed/playlist/37i9dQZF1DX9qzRP3WOzKH?utm_source=generator',
-  'https://open.spotify.com/embed/playlist/37i9dQZF1DWVIzZt2GAU4X?utm_source=generator',
-  'https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThddIjWuGT?utm_source=generator',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThddIjWuGT?utm_source=generator',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DWU13kKnk03AP?utm_source=generator',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DX9qzRP3WOzKH?utm_source=generator',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DWVIzZt2GAU4X?utm_source=generator',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThddIjWuGT?utm_source=generator',
   ];
 
   var repeatPosition = [0, 0, 0, 0, 0];
@@ -105,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // ];
 
   int selectedCategoryIndex = 0;
+  int MUSIC_LIMIT = 2; //change the number if you increase the sets of music (n-1)
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -450,7 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void changeRepeatPosition() {
-    if (repeatPosition[selectedCategoryIndex] != 2) {
+    if (repeatPosition[selectedCategoryIndex] != MUSIC_LIMIT) {
       repeatPosition[selectedCategoryIndex] += 1;
     } else {
       repeatPosition[selectedCategoryIndex] = 0;
