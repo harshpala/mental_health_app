@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "170429903909",
+    "project_id": "mental-health-app-bc55d",
+    "storage_bucket": "mental-health-app-bc55d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170429903909:android:7d1496732a51c2b8603bcc",
+        "android_client_info": {
+          "package_name": "com.example.music_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170429903909-7404ta3brrgguj2jgmuoie3g1ne8h8rd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRXm86ZdWEZ6YcMIHwKHvQ4XIcIr6hDCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170429903909-7404ta3brrgguj2jgmuoie3g1ne8h8rd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
