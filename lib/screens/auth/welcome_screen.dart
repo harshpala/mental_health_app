@@ -1,15 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mental_health_app/screens/auth/auth_screen.dart';
-import 'package:mental_health_app/util/navigation/routes.dart';
-import '../../res/assets.dart';
 import '../../res/colors.dart';
 import '../../util/navigation/navigation_service.dart';
-import '/globals.dart' as globals;
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({
@@ -23,6 +19,24 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final emailcontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
+  late FocusNode myFocusNode;
+  bool error = false;
+  late String errorString;
+  @override
+  void initState() {
+    super.initState();
+
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    myFocusNode.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,30 +51,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 50.h,
+                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IconButton(
-                      iconSize: 100,
-                      onPressed: (() {}),
-                      icon: SvgPicture.asset(
-                        Assets.BACK,
-                        color: Colors.transparent,
-                        // fit: BoxFit.fill,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 35.w,
-                    ),
                     Text(
                       "Take Care",
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
-                            fontSize: 20.sp,
+                            fontSize: 30.sp,
                             color: AppColors.textColor,
                             fontWeight: FontWeight.w500),
                       ),
+                    ),
+                    SizedBox(
+                      height: 100.h,
                     ),
                   ],
                 ),
@@ -73,7 +81,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           "Hello !",
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
-                                fontSize: 20.sp,
+                                fontSize: 28.sp,
                                 color: AppColors.textColor,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -82,18 +90,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           "Please signin with valid credentials",
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: 15.sp,
                                 color: AppColors.textColor,
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
                         SizedBox(
-                          height: 50.h,
+                          height: 25.h,
                         ),
                         TextField(
                           controller: emailcontroller,
-                          maxLines: null,
+                          textInputAction: TextInputAction.next,
+                          onSubmitted: (value) => myFocusNode.requestFocus(),
+                          keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
+                            isDense: true,
                             enabledBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   width: 1.5, color: AppColors.textColor),
@@ -110,7 +121,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                           style: GoogleFonts.poppins(
                             textStyle: const TextStyle(
-                              height: 0.5,
+                              //height: 0.5,
                               color: AppColors.textColor,
                             ),
                           ),
@@ -119,9 +130,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           height: 15.h,
                         ),
                         TextField(
+                          focusNode: myFocusNode,
                           controller: passwordcontroller,
-                          maxLines: null,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
                           decoration: InputDecoration(
+                            isDense: true,
                             enabledBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   width: 1.5, color: AppColors.textColor),
@@ -138,13 +152,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                           style: GoogleFonts.poppins(
                             textStyle: const TextStyle(
-                              height: 0.5,
+                              //height: 0.5,
                               color: AppColors.textColor,
                             ),
                           ),
                         ),
                         SizedBox(
-                          height: 2.5.h,
+                          height: 5.h,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -161,7 +175,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 'LogIn',
                                 style: GoogleFonts.poppins(
                                   textStyle: const TextStyle(
-                                    height: 0.5,
+                                    fontSize: 15,
+                                    //height: 0.5,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -203,6 +218,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 10.h),
+                        error
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    errorString,
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
+                                ],
+                              )
+                            : Container()
                       ]),
                 ),
               ],
@@ -212,6 +239,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Future signIn() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    error = false;
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -225,7 +254,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           email: emailcontroller.text.trim(),
           password: passwordcontroller.text.trim());
     } on FirebaseAuthException catch (e) {
-      print(e);
+      setState(() {
+        error = true;
+        errorString = e.message!;
+      });
+
+      print('.............................$e');
     }
     GetIt.I
         .get<NavigationService>()

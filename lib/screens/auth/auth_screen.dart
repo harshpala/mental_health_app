@@ -26,11 +26,38 @@ class _AuthScreenState extends State<AuthScreen> {
   final phonenocontroller = TextEditingController();
   final namecontroller = TextEditingController();
 
+  late FocusNode emailnode;
+  late FocusNode namenode;
+  late FocusNode passnode;
+  late FocusNode conpassnode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    emailnode = FocusNode();
+    namenode = FocusNode();
+    passnode = FocusNode();
+    conpassnode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    emailnode.dispose();
+    namenode.dispose();
+    passnode.dispose();
+    conpassnode.dispose();
+
+    super.dispose();
+  }
+
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
           child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -42,6 +69,9 @@ class _AuthScreenState extends State<AuthScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 50.h,
+            ),
             Row(
               children: [
                 IconButton(
@@ -56,13 +86,13 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: 35.w,
+                  width: 0.w,
                 ),
                 Text(
                   "Take Care",
                   style: GoogleFonts.poppins(
                     textStyle: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: 30.sp,
                         color: AppColors.textColor,
                         fontWeight: FontWeight.w500),
                   ),
@@ -71,201 +101,268 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "New User",
-                    style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
-                          fontSize: 20.sp,
+              child: Form(
+                key: _formkey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "New User",
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            fontSize: 28.sp,
+                            color: AppColors.textColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Text(
+                      "Please use valid Username and Password",
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            fontSize: 15.sp,
+                            color: AppColors.textColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    TextFormField(
+                      onFieldSubmitted: ((value) => emailnode.requestFocus()),
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.length < 10) {
+                          return 'Please enter a valid phone number';
+                        }
+                        return null;
+                      },
+                      controller: phonenocontroller,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        hintText: 'Phone Number',
+                        hintStyle: const TextStyle(color: AppColors.textColor),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      style: GoogleFonts.poppins(
+                        //height: 0.5,
+                        textStyle: const TextStyle(
                           color: AppColors.textColor,
-                          fontWeight: FontWeight.w500),
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    "Please select valid Username and Password",
-                    style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
-                          fontSize: 12.sp,
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    TextFormField(
+                      controller: emailcontroller,
+                      maxLines: null,
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            !value.contains('@')) {
+                          return 'Please enter valid Email';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        isDense: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        hintText: 'Email',
+                        hintStyle: const TextStyle(color: AppColors.textColor),
+                      ),
+                      focusNode: emailnode,
+                      onFieldSubmitted: (value) => namenode.requestFocus(),
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.emailAddress,
+                      style: GoogleFonts.poppins(
+                        textStyle: const TextStyle(
+                          // height: 0.5,
                           color: AppColors.textColor,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50.h,
-                  ),
-                  TextField(
-                    controller: phonenocontroller,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      hintText: 'Phone Number',
-                      hintStyle: const TextStyle(color: AppColors.textColor),
-                    ),
-                    keyboardType: TextInputType.phone,
-                    style: GoogleFonts.poppins(
-                      height: 0.5,
-                      textStyle: const TextStyle(
-                        color: AppColors.textColor,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  TextField(
-                    controller: emailcontroller,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      hintText: 'Email',
-                      hintStyle: const TextStyle(color: AppColors.textColor),
+                    SizedBox(
+                      height: 15.h,
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                    style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
-                        height: 0.5,
-                        color: AppColors.textColor,
+                    TextFormField(
+                      focusNode: namenode,
+                      onFieldSubmitted: (value) => passnode.requestFocus(),
+                      textInputAction: TextInputAction.next,
+                      controller: namecontroller,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter Valid Name';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        isDense: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        hintText: 'Display Name',
+                        hintStyle: const TextStyle(color: AppColors.textColor),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  TextField(
-                    controller: namecontroller,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      hintText: 'Display Name',
-                      hintStyle: const TextStyle(color: AppColors.textColor),
-                    ),
-                    style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
-                        height: 0.5,
-                        color: AppColors.textColor,
+                      style: GoogleFonts.poppins(
+                        textStyle: const TextStyle(
+                          // height: 0.5,
+                          color: AppColors.textColor,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  TextField(
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      hintText: 'Password',
-                      hintStyle: const TextStyle(color: AppColors.textColor),
+                    SizedBox(
+                      height: 15.h,
                     ),
-                    keyboardType: TextInputType.visiblePassword,
-                    style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
-                        height: 0.5,
-                        color: AppColors.textColor,
+                    TextFormField(
+                      controller: passwordcontroller,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        hintText: 'Password',
+                        hintStyle: const TextStyle(color: AppColors.textColor),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  TextField(
-                    controller: passwordcontroller,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 1.5, color: AppColors.textColor),
-                        borderRadius: BorderRadius.circular(15.00.r),
-                      ),
-                      hintText: 'Confirm Password',
-                      hintStyle: const TextStyle(color: AppColors.textColor),
-                    ),
-                    keyboardType: TextInputType.visiblePassword,
-                    style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
-                        height: 0.5,
-                        color: AppColors.textColor,
+                      validator: (value) {
+                        RegExp regex = RegExp(
+                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter a Password';
+                        } else {
+                          if (!regex.hasMatch(value)) {
+                            return 'Password must contain:\nMinimum 1 Upper case\nMinimum 1 Numeric Number\nMinimum 1 lowercase \nMinimum 1 Special Character\nCharacters ( ! @ # \$ & * ~ )';
+                          } else {
+                            return null;
+                          }
+                        }
+                      },
+                      focusNode: passnode,
+                      onFieldSubmitted: (value) => conpassnode.requestFocus(),
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      style: GoogleFonts.poppins(
+                        textStyle: const TextStyle(
+                          //height: 0.5,
+                          color: AppColors.textColor,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 150.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 150.w,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.r)),
-                            //  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
-                            backgroundColor: AppColors.textColor,
-                          ),
-                          onPressed: (() {
-                            setState(() {
-                              signIn();
-
-                              globals.isloggedIn = !globals.isloggedIn;
-                            });
-                          }),
-                          child: Text(
-                            'Submit',
-                            style: GoogleFonts.poppins(
-                              textStyle: const TextStyle(
-                                height: 0.5,
-                                color: Colors.white,
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        isDense: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: AppColors.textColor),
+                          borderRadius: BorderRadius.circular(15.00.r),
+                        ),
+                        hintText: 'Confirm Password',
+                        hintStyle: const TextStyle(color: AppColors.textColor),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter a Password';
+                        } else {
+                          if (value != passwordcontroller.text) {
+                            return 'Your Passwords do not match';
+                          }
+                        }
+                        return null;
+                      },
+                      focusNode: conpassnode,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      style: GoogleFonts.poppins(
+                        textStyle: const TextStyle(
+                          //height: 0.5,
+                          color: AppColors.textColor,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 80.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 45.h,
+                          width: 150.w,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.r)),
+                              //  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+                              backgroundColor: AppColors.textColor,
+                            ),
+                            onPressed: (() {
+                              setState(() {
+                                if (_formkey.currentState!.validate()) {
+                                  signIn();
+                                  globals.isloggedIn = !globals.isloggedIn;
+                                }
+                              });
+                            }),
+                            child: Text(
+                              'Submit',
+                              style: GoogleFonts.poppins(
+                                fontSize: 20.sp,
+                                textStyle: const TextStyle(
+                                  height: 0.5,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ],
