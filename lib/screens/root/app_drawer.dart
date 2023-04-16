@@ -5,15 +5,14 @@ import 'package:mental_health_app/globals.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../res/assets.dart';
-import 'bottom_nav.dart';
 
 class AppDrawer extends StatelessWidget {
-  final Tabs currentTab;
-  final ValueChanged<Tabs> onTabChanged;
+  final selectedIndex;
+  final Function(int) onItemTapped;
   const AppDrawer({
     Key? key,
-    required this.currentTab,
-    required this.onTabChanged,
+    required this.selectedIndex,
+    required this.onItemTapped,
   }) : super(key: key);
   _launchCaller() async {
     if (await canLaunchUrlString(call_SOS)) {
@@ -56,7 +55,7 @@ class AppDrawer extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 60.0, bottom: 20),
                     child: GestureDetector(
                       onTap: () {
-                        onTabChanged(Tabs.home);
+                        onItemTapped(2);
                         Navigator.pop(context);
                       },
                       child: Text(
@@ -73,7 +72,7 @@ class AppDrawer extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: GestureDetector(
                       onTap: () {
-                        onTabChanged(Tabs.profile);
+                        onItemTapped(0);
                         Navigator.pop(context);
                       },
                       child: Text(
@@ -90,7 +89,7 @@ class AppDrawer extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: GestureDetector(
                       onTap: () {
-                        onTabChanged(Tabs.meditation);
+                        onItemTapped(1);
                         Navigator.pop(context);
                       },
                       child: Text(
@@ -103,15 +102,15 @@ class AppDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: GestureDetector(
-                      onTap: () {
-                        onTabChanged(Tabs.tracker);
-                        Navigator.pop(context);
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      onItemTapped(3);
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
-                        'Tracker',
+                        'Music',
                         style: GoogleFonts.poppins(
                           textStyle: const TextStyle(
                             color: Colors.white,
@@ -120,15 +119,15 @@ class AppDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      onTabChanged(Tabs.album);
-                      Navigator.pop(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: GestureDetector(
+                      onTap: () {
+                        onItemTapped(4);
+                        Navigator.pop(context);
+                      },
                       child: Text(
-                        'Music',
+                        'Tracker',
                         style: GoogleFonts.poppins(
                           textStyle: const TextStyle(
                             color: Colors.white,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../res/assets.dart';
 import '/globals.dart' as globals;
@@ -23,7 +22,7 @@ class _HeaderState extends State<Header> {
         globals.isDay ? Image.asset(Assets.MORNING) : Image.asset(Assets.NIGHT),
         Positioned(
           right: 10,
-          top: 15,
+          top: 45,
           child: Row(
             children: [
               ClipOval(

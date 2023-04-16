@@ -3,102 +3,98 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mental_health_app/res/assets.dart';
 import 'package:mental_health_app/res/colors.dart';
 
-enum Tabs { profile, meditation, home, album, tracker }
-
-extension TabExt on Tabs {
-  String get name {
-    switch (this) {
-      case Tabs.profile:
-        return "Profile";
-      case Tabs.meditation:
-        return "Meditation";
-      case Tabs.home:
-        return "Home";
-      case Tabs.album:
-        return "Album";
-      case Tabs.tracker:
-        return "Tracker";
-      default:
-        return "";
-    }
-  }
-
-  String get selectedIcon {
-    switch (this) {
-      case Tabs.profile:
-        return Assets.PROFILE_SELECTED_TAB;
-      case Tabs.meditation:
-        return Assets.MED_SELECTED_TAB;
-      case Tabs.home:
-        return Assets.HOME_SELECTED_TAB;
-      case Tabs.album:
-        return Assets.PLAYLIST_SELECTED_TAB;
-      case Tabs.tracker:
-        return Assets.TRACKER_SELECTED_TAB;
-      default:
-        return "";
-    }
-  }
-
-  String get unSelectedIcon {
-    switch (this) {
-      case Tabs.profile:
-        return Assets.PROFILE_UNSELECTED_TAB;
-      case Tabs.meditation:
-        return Assets.MED_UNSELECTED_TAB;
-      case Tabs.home:
-        return Assets.HOME_UNSELECTED_TAB;
-      case Tabs.album:
-        return Assets.PLAYLIST_UNSELECTED_TAB;
-      case Tabs.tracker:
-        return Assets.TRACKER_UNSELECTED_TAB;
-      default:
-        return "";
-    }
-  }
-}
-
-class BottomNav extends StatelessWidget {
-  final Tabs currentTab;
-  final ValueChanged<Tabs> didSelectTab;
-  const BottomNav({
+class bottomNav extends StatelessWidget {
+  final selectedIndex;
+  final Function(int) onItemTapped;
+  bottomNav({
     Key? key,
-    required this.currentTab,
-    required this.didSelectTab,
+    required this.selectedIndex,
+    required this.onItemTapped,
   }) : super(key: key);
 
-  void selectTab(Tabs tab) {
-    didSelectTab(tab);
-  }
+  List<String> selectedIcon = [
+    Assets.PROFILE_SELECTED_TAB,
+    Assets.MED_SELECTED_TAB,
+    Assets.HOME_SELECTED_TAB,
+    Assets.PLAYLIST_SELECTED_TAB,
+    Assets.TRACKER_SELECTED_TAB,
+  ];
+  List<String> unSelectedIcon = [
+    Assets.PROFILE_UNSELECTED_TAB,
+    Assets.MED_UNSELECTED_TAB,
+    Assets.HOME_UNSELECTED_TAB,
+    Assets.PLAYLIST_UNSELECTED_TAB,
+    Assets.TRACKER_UNSELECTED_TAB,
+  ];
 
+  List<String> label_name = [
+    "Profile",
+    "Meditation",
+    "Home",
+    "Album",
+    "Tracker",
+  ];
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16.r), topRight: Radius.circular(16.r)),
       child: BottomNavigationBar(
-          elevation: 0,
-          unselectedLabelStyle: const TextStyle(
-              fontSize: 1, fontWeight: FontWeight.w600, height: 1),
-          selectedLabelStyle: const TextStyle(
-              fontSize: 11, fontWeight: FontWeight.w600, height: 1),
-          backgroundColor: AppColors.secondary,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) {
-            didSelectTab(Tabs.values.toList()[index]);
-          },
-          items: Tabs.values.map((tab) => _buildItem(tab, context)).toList()),
-    );
-  }
-
-  BottomNavigationBarItem _buildItem(Tabs tab, BuildContext context) {
-    return BottomNavigationBarItem(
-      icon: Image.asset(
-          currentTab == tab ? tab.selectedIcon : tab.unSelectedIcon,
-          height: 60.h),
-      label: tab.name,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              selectedIndex == 0
+                  ? selectedIcon[selectedIndex]
+                  : unSelectedIcon[0],
+              height: 60.h,
+            ),
+            label: label_name[0],
+          ),
+          BottomNavigationBarItem(
+              icon: Image.asset(
+                selectedIndex == 1
+                    ? selectedIcon[selectedIndex]
+                    : unSelectedIcon[1],
+                height: 60.h,
+              ),
+              label: label_name[1]),
+          BottomNavigationBarItem(
+              icon: Image.asset(
+                selectedIndex == 2
+                    ? selectedIcon[selectedIndex]
+                    : unSelectedIcon[2],
+                height: 60.h,
+              ),
+              label: label_name[2]),
+          BottomNavigationBarItem(
+              icon: Image.asset(
+                selectedIndex == 3
+                    ? selectedIcon[selectedIndex]
+                    : unSelectedIcon[3],
+                height: 60.h,
+              ),
+              label: label_name[3]),
+          BottomNavigationBarItem(
+              icon: Image.asset(
+                selectedIndex == 4
+                    ? selectedIcon[selectedIndex]
+                    : unSelectedIcon[4],
+                height: 60.h,
+              ),
+              label: label_name[4]),
+        ],
+        currentIndex: selectedIndex,
+        onTap: onItemTapped,
+        elevation: 0,
+        unselectedLabelStyle: const TextStyle(
+            fontSize: 1, fontWeight: FontWeight.w600, height: 1),
+        selectedLabelStyle: const TextStyle(
+            fontSize: 11, fontWeight: FontWeight.w600, height: 1),
+        backgroundColor: AppColors.secondary,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+      ),
     );
   }
 }

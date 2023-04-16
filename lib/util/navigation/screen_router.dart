@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_function_declarations_over_variables
 
 import 'package:flutter/material.dart';
-import 'package:mental_health_app/globals.dart';
-import 'package:mental_health_app/screens/auth/auth_screen.dart';
 import 'package:mental_health_app/screens/home/home_screen.dart';
 import 'package:mental_health_app/screens/playlist/playing_now_screen.dart';
 import 'package:mental_health_app/screens/playlist/playlist_screen.dart';
 import 'package:mental_health_app/screens/playlist/album_screen.dart';
+import 'package:mental_health_app/screens/root/root_widget.dart';
 import 'package:mental_health_app/screens/search_result/search_result_screen.dart';
 import 'package:mental_health_app/screens/splashscreen/splash_screen.dart';
 
@@ -27,7 +26,7 @@ class ScreenRouter {
 
       case Routes.home:
         return FadeRoute(
-          page: const HomeScreen(),
+          page: const RootWidget(),
         );
 
       case Routes.searchResult:
@@ -37,7 +36,9 @@ class ScreenRouter {
 
       case Routes.playlist:
         return FadeRoute(
-          page: const AlbumScreen(),
+          page: const AlbumScreen(
+            isCurrent: true,
+          ),
         );
       case Routes.playingNow:
         return FadeRoute(

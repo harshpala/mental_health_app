@@ -13,8 +13,10 @@ import '../../res/colors.dart';
 import '/globals.dart' as globals;
 
 class AlbumScreen extends StatefulWidget {
+  final bool isCurrent;
   const AlbumScreen({
     Key? key,
+    required this.isCurrent,
   }) : super(key: key);
 
   @override
@@ -128,231 +130,234 @@ class _AlbumScreenState extends State<AlbumScreen> {
   Widget build(BuildContext context) {
     int i = globals.i;
     String name = globals.title;
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            GetIt.I.get<NavigationService>().back();
-          },
-          child: SvgPicture.asset(
-            Assets.BACK,
-            height: 24,
-            width: 24,
-            color: AppColors.textColor,
-            // fit: BoxFit.fill,
+    return Offstage(
+      offstage: !widget.isCurrent,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              GetIt.I.get<NavigationService>().back();
+            },
+            child: SvgPicture.asset(
+              Assets.BACK,
+              height: 24,
+              width: 24,
+              color: AppColors.textColor,
+              // fit: BoxFit.fill,
+            ),
           ),
+          automaticallyImplyLeading: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.customblue, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.customblue, Colors.white],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            Image.asset(Assets.MORNING),
-            SizedBox(height: 8.h),
-            Container(
-              height: 127.r,
-              padding: EdgeInsets.only(left: 20.w, right: 20.w),
-              child: Row(
-                children: [
-                  Flexible(
-                    child: Container(
-                      width: 127.r,
-                      height: 127.r,
-                      margin: EdgeInsets.only(right: 14.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.r),
-                        image: DecorationImage(
-                          image: AssetImage("assets/png/home/home$i.png"),
-                          fit: BoxFit.cover,
+          child: Column(
+            children: [
+              Image.asset(Assets.MORNING),
+              SizedBox(height: 8.h),
+              Container(
+                height: 127.r,
+                padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Container(
+                        width: 127.r,
+                        height: 127.r,
+                        margin: EdgeInsets.only(right: 14.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          image: DecorationImage(
+                            image: AssetImage("assets/png/home/home$i.png"),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Album - ${album.songs} songs - ${album.year}",
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            fontSize: 14.sp,
-                            color: AppColors.textColor,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        name,
-                        overflow: TextOverflow.fade,
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            fontSize: 24.sp,
-                            color: AppColors.textColor,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        album.artist,
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            fontSize: 14.sp,
-                            color: AppColors.textColor,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 2.h, right: 4.w),
-                            child: SvgPicture.asset(
-                              Assets.HEART_OUTLINED,
-                              height: 24.w,
-                              width: 24.w,
-                              fit: BoxFit.fill,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Album - ${album.songs} songs - ${album.year}",
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              fontSize: 14.sp,
                               color: AppColors.textColor,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(width: 19.w),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 2.h, right: 4.w),
-                            child: SvgPicture.asset(
-                              Assets.DOWNLOAD,
-                              height: 24.w,
-                              width: 24.w,
-                              fit: BoxFit.fill,
+                        ),
+                        Text(
+                          name,
+                          overflow: TextOverflow.fade,
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              fontSize: 24.sp,
                               color: AppColors.textColor,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
+                        ),
+                        Text(
+                          album.artist,
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              fontSize: 14.sp,
+                              color: AppColors.textColor,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 2.h, right: 4.w),
+                              child: SvgPicture.asset(
+                                Assets.HEART_OUTLINED,
+                                height: 24.w,
+                                width: 24.w,
+                                fit: BoxFit.fill,
+                                color: AppColors.textColor,
+                              ),
+                            ),
+                            SizedBox(width: 19.w),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 2.h, right: 4.w),
+                              child: SvgPicture.asset(
+                                Assets.DOWNLOAD,
+                                height: 24.w,
+                                width: 24.w,
+                                fit: BoxFit.fill,
+                                color: AppColors.textColor,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.separated(
-                padding: EdgeInsets.only(top: 17.h),
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                itemBuilder: (c, i) {
-                  return InkWell(
-                    onTap: () {
-                      GetIt.I
-                          .get<NavigationService>()
-                          .to(routeName: Routes.playingNow);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(left: 29.w, right: 34.w),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: 22.w),
-                            child: i == 2
-                                ? SizedBox(
-                                    width: 32.2,
-                                    height: 29.h,
-                                    child: const Icon(
-                                      Icons.equalizer,
-                                      color: AppColors.textColor,
-                                    ),
-                                  )
-                                : Text(
-                                    formatter.format(i + 1),
-                                    maxLines: 1,
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        fontSize: 24.sp,
+              Expanded(
+                child: ListView.separated(
+                  padding: EdgeInsets.only(top: 17.h),
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  itemBuilder: (c, i) {
+                    return InkWell(
+                      onTap: () {
+                        GetIt.I
+                            .get<NavigationService>()
+                            .to(routeName: Routes.playingNow);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 29.w, right: 34.w),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 22.w),
+                              child: i == 2
+                                  ? SizedBox(
+                                      width: 32.2,
+                                      height: 29.h,
+                                      child: const Icon(
+                                        Icons.equalizer,
                                         color: AppColors.textColor,
-                                        fontStyle: FontStyle.normal,
-                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  : Text(
+                                      formatter.format(i + 1),
+                                      maxLines: 1,
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          fontSize: 24.sp,
+                                          color: AppColors.textColor,
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                          ),
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                songs[i].title,
-                                maxLines: 1,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    fontSize: 18.sp,
-                                    color: AppColors.textColor,
-                                    fontStyle: FontStyle.normal,
-                                    fontWeight: FontWeight.w600,
+                            ),
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  songs[i].title,
+                                  maxLines: 1,
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontSize: 18.sp,
+                                      color: AppColors.textColor,
+                                      fontStyle: FontStyle.normal,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  songs[i].artist,
+                                  maxLines: 1,
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: AppColors.textColor,
+                                      fontStyle: FontStyle.normal,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 2.h, right: 4.w),
+                              child: SvgPicture.asset(
+                                Assets.HEART_OUTLINED,
+                                height: 24.w,
+                                width: 24.w,
+                                fit: BoxFit.fill,
+                                color: AppColors.textColor,
                               ),
-                              SizedBox(height: 4.h),
-                              Text(
-                                songs[i].artist,
-                                maxLines: 1,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: AppColors.textColor,
-                                    fontStyle: FontStyle.normal,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              )
-                            ],
-                          )),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 2.h, right: 4.w),
-                            child: SvgPicture.asset(
-                              Assets.HEART_OUTLINED,
-                              height: 24.w,
-                              width: 24.w,
-                              fit: BoxFit.fill,
-                              color: AppColors.textColor,
                             ),
-                          ),
-                          SizedBox(width: 28.w),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 2.h, right: 4.w),
-                            child: SvgPicture.asset(
-                              Assets.DOWNLOAD,
-                              height: 24.w,
-                              width: 24.w,
-                              fit: BoxFit.fill,
-                              color: AppColors.textColor,
+                            SizedBox(width: 28.w),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 2.h, right: 4.w),
+                              child: SvgPicture.asset(
+                                Assets.DOWNLOAD,
+                                height: 24.w,
+                                width: 24.w,
+                                fit: BoxFit.fill,
+                                color: AppColors.textColor,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-                separatorBuilder: (c, i) {
-                  return SizedBox(
-                    height: 15.h,
-                  );
-                },
-                itemCount: songs.length,
-              ),
-            )
-          ],
+                    );
+                  },
+                  separatorBuilder: (c, i) {
+                    return SizedBox(
+                      height: 15.h,
+                    );
+                  },
+                  itemCount: songs.length,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

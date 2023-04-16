@@ -105,12 +105,12 @@ class _PlayListScreenState extends State<PlayListScreen> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Tabs _currentTab = Tabs.album;
-  void _selectTab(Tabs tab) {
-    setState(() {
-      _currentTab = tab;
-    });
-  }
+  // Tabs _currentTab = Tabs.album;
+  // void _selectTab(Tabs tab) {
+  //   setState(() {
+  //     _currentTab = tab;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -131,77 +131,23 @@ class _PlayListScreenState extends State<PlayListScreen> {
 </html>''', mimeType: 'text/html', encoding: Encoding.getByName('utf-8'));
     }
 
-    return Scaffold(
-      bottomNavigationBar: BottomNav(
-        currentTab: _currentTab,
-        didSelectTab: _selectTab,
-      ),
-      key: scaffoldKey,
-      drawer: ClipRRect(
-          borderRadius: BorderRadius.horizontal(right: Radius.circular(16.r)),
-          child: SizedBox(
-              width: 220.w,
-              child: AppDrawer(
-                currentTab: _currentTab,
-                onTabChanged: _selectTab,
-              ))),
-      // appBar: AppBar(
-      //   leading: GestureDetector(
-      //     onTap: () {
-      //       GetIt.I
-      //           .get<NavigationService>()
-      //           .clearAllTo(routeName: Routes.home);
-      //     },
-      //     child: SvgPicture.asset(
-      //       Assets.BACK,
-      //       height: 24,
-      //       width: 24,
-      //       color: const Color(0xffffffff),
-      //       // fit: BoxFit.fill,
-      //     ),
-      //   ),
-      //   automaticallyImplyLeading: true,
-      //   backgroundColor: Colors.black,
-      //   elevation: 0,
-      // ),
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppColors.customblue, Colors.white],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 1.75,
+      child: InAppWebView(
+        initialUrlRequest: URLRequest(url: setMusicUrl()),
+        initialOptions: settings,
+        gestureRecognizers: Set()
+          ..add(
+            Factory<VerticalDragGestureRecognizer>(
+              () => VerticalDragGestureRecognizer(),
+            ), // or null
           ),
-          child: Column(
-            children: [
-              Header(
-                scaffoldkey: scaffoldKey,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 1.75,
-                child: InAppWebView(
-                  initialUrlRequest: URLRequest(url: setMusicUrl()),
-                  initialOptions: settings,
-                  gestureRecognizers: Set()
-                    ..add(
-                      Factory<VerticalDragGestureRecognizer>(
-                        () => VerticalDragGestureRecognizer(),
-                      ), // or null
-                    ),
-                  onWebViewCreated: (InAppWebViewController controller) {
-                    webView = controller;
-                  },
-                  onLoadStart: (InAppWebViewController controller, Uri? url) {},
-                  onLoadStop:
-                      (InAppWebViewController controller, Uri? url) async {},
-                  onProgressChanged:
-                      (InAppWebViewController controller, int progress) {},
-                ),
-              ),
-            ],
-          ),
-        ),
+        onWebViewCreated: (InAppWebViewController controller) {
+          webView = controller;
+        },
+        onLoadStart: (InAppWebViewController controller, Uri? url) {},
+        onLoadStop: (InAppWebViewController controller, Uri? url) async {},
+        onProgressChanged: (InAppWebViewController controller, int progress) {},
       ),
     );
   }

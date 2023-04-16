@@ -125,29 +125,22 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Tabs _currentTab = Tabs.tracker;
-  void _selectTab(Tabs tab) {
-    setState(() {
-      _currentTab = tab;
-    });
-  }
+  // Tabs _currentTab = Tabs.tracker;
+  // void _selectTab(Tabs tab) {
+  //   setState(() {
+  //     _currentTab = tab;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNav(
-        currentTab: _currentTab,
-        didSelectTab: _selectTab,
-      ),
+      // bottomNavigationBar: BottomNav(
+      //   currentTab: _currentTab,
+      //   didSelectTab: _selectTab,
+      // ),
       key: scaffoldKey,
-      drawer: ClipRRect(
-          borderRadius: BorderRadius.horizontal(right: Radius.circular(16.r)),
-          child: SizedBox(
-              width: 220.w,
-              child: AppDrawer(
-                currentTab: _currentTab,
-                onTabChanged: _selectTab,
-              ))),
+
       extendBodyBehindAppBar: true,
       floatingActionButton: MyFloatingActionButton(onPressed: createNewHabit),
       body: Container(
