@@ -9,6 +9,7 @@ String name = '';
 String? doc_id = '';
 String journal = '';
 int selectedCategoryIndex = 0;
+bool isArticleopen = false;
 
 final url1 = [
   'https://open.spotify.com/embed/playlist/6nxPNnmSE0d5WlplUsa5L3?utm_source=generator',

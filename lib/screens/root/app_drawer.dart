@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mental_health_app/globals.dart';
+import 'package:mental_health_app/screens/root/root_widget.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
+import '/globals.dart' as globals;
 import '../../res/assets.dart';
+import '../Article/article_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   final selectedIndex;
@@ -123,11 +125,35 @@ class AppDrawer extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: GestureDetector(
                       onTap: () {
+                        globals.isArticleopen ? Navigator.pop(context) : null;
                         onItemTapped(4);
                         Navigator.pop(context);
                       },
                       child: Text(
                         'Tracker',
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        globals.isArticleopen
+                            ? null
+                            : Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ArticleScreen(
+                                      selectedIndex: selectedIndex,
+                                      onItemTapped: onItemTapped,
+                                    )));
+                      },
+                      child: Text(
+                        'Articles',
                         style: GoogleFonts.poppins(
                           textStyle: const TextStyle(
                             color: Colors.white,
@@ -153,7 +179,7 @@ class AppDrawer extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 140),
+                    padding: const EdgeInsets.only(bottom: 120),
                     child: TextButton(
                       onPressed: () {
                         FirebaseAuth.instance.signOut();

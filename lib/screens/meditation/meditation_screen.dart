@@ -88,9 +88,6 @@ class _MeditationScreenState extends State<MeditationScreen> {
               globals.doc_id = userData.id;
               return Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                  ),
                   Expanded(
                     child: ListView(
                       physics: const BouncingScrollPhysics(

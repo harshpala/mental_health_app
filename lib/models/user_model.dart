@@ -20,6 +20,7 @@ class UserModel {
   toJson() {
     return {
       'email': email,
+      //'journal': journal,
       'name': name,
       'number': phoneno,
     };

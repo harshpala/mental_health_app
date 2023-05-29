@@ -53,6 +53,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -339,13 +340,12 @@ class _AuthScreenState extends State<AuthScreen> {
                               //  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
                               backgroundColor: AppColors.textColor,
                             ),
-                            onPressed: (() {
-                              setState(() {
-                                if (_formkey.currentState!.validate()) {
-                                  signIn();
-                                  globals.isloggedIn = !globals.isloggedIn;
-                                }
-                              });
+                            onPressed: (() async {
+                              if (_formkey.currentState!.validate()) {
+                                _formkey.currentState!.save();
+                                await signIn();
+                                globals.isloggedIn = !globals.isloggedIn;
+                              }
                             }),
                             child: Text(
                               'Submit',
