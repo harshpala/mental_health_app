@@ -53,6 +53,43 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  bool emailexists = false;
+  bool phonenoexists = false;
+  bool emailExists(String email) {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .get()
+        .then((value) {
+      if (value.size == 0) {
+        emailexists = false;
+      } else if (value.size != 0) {
+        emailexists = true;
+      }
+      print(emailexists);
+      return emailexists;
+    });
+
+    return emailexists;
+  }
+
+  bool phoneExists(String phoneno) {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .where('number', isEqualTo: phoneno)
+        .get()
+        .then((value) {
+      if (value.size == 0) {
+        phonenoexists = false;
+      } else if (value.size != 0) {
+        phonenoexists = true;
+      }
+      print(phonenoexists);
+      return phonenoexists;
+    });
+
+    return phonenoexists;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,11 +167,14 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                     TextFormField(
                       onFieldSubmitted: ((value) => emailnode.requestFocus()),
+                      onChanged: (value) => phoneExists(value),
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
                             value.length < 10) {
                           return 'Please enter a valid phone number';
+                        } else if (phonenoexists) {
+                          return 'phone number already exists';
                         }
                         return null;
                       },
@@ -169,11 +209,14 @@ class _AuthScreenState extends State<AuthScreen> {
                     TextFormField(
                       controller: emailcontroller,
                       maxLines: null,
+                      onChanged: (value) => emailExists(value),
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
                             !value.contains('@')) {
                           return 'Please enter valid Email';
+                        } else if (emailexists) {
+                          return 'Email already exists';
                         }
                         return null;
                       },
