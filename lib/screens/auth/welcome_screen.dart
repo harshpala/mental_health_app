@@ -223,9 +223,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    errorString,
-                                    style: const TextStyle(color: Colors.red),
+                                  Flexible(
+                                    child: Text(
+                                      errorString,
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
                                   ),
                                 ],
                               )

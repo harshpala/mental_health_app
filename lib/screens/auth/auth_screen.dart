@@ -415,6 +415,15 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Future signIn() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.textColor,
+              ),
+            ));
     final user = UserModel(
         name: namecontroller.text.trim(),
         phoneno: phonenocontroller.text.trim(),
