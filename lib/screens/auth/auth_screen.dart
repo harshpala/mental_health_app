@@ -309,7 +309,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           return 'Please Enter a Password';
                         } else {
                           if (!regex.hasMatch(value)) {
-                            return 'Password must contain:\nMinimum 1 Upper case\nMinimum 1 Numeric Number\nMinimum 1 lowercase \nMinimum 1 Special Character\nCharacters ( ! @ # \$ & * ~ )';
+                            return 'Password must contain:\nMinimum 1 Upper case\nMinimum 1 Numeric Number\nMinimum 1 lowercase \nMinimum 1 Special Character\nCharacters ( ! @ # \$ & * ~ )\npassword must be at least 8 characters';
                           } else {
                             return null;
                           }
@@ -368,7 +368,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 80.h,
+                      height: 50.h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -402,6 +402,9 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 100.h,
+                        )
                       ],
                     )
                   ],
